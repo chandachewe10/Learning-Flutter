@@ -90,6 +90,7 @@ class _ZescoResidentialCalculatorMainBodyState extends State<ZescoResidentialCal
   final TextEditingController units = new TextEditingController();
   final TextEditingController vat = new TextEditingController();
   final TextEditingController customs = new TextEditingController();
+  final TextEditingController after_tax = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -140,8 +141,36 @@ controller: amount,
         child: ElevatedButton(
           onPressed:(){
             setState(() {
-              double units_results = double.parse(amount.text);
-              units.text = units_results.toString() +" kWh";
+              double amount_value = double.parse(amount.text);
+              double vat_tax = amount_value*0.16;
+              double customs_tax = amount_value*0.03;
+              double totalTax = (vat_tax) + (customs_tax);
+              double amountAfterTax = amount_value - totalTax;
+              after_tax.text = "K"+amountAfterTax.toStringAsFixed(2);
+              vat.text = "K"+(vat_tax).toStringAsFixed(2);
+              customs.text = "K"+(customs_tax).toStringAsFixed(2);
+
+
+              //if units <= k47, do this
+              if (amountAfterTax <= 47) {
+                units.text = (amount_value / 0.47).toStringAsFixed(2)+" kWh";
+              } else
+
+              if (amountAfterTax >= 48 && amountAfterTax <= 217) {
+                double R1units = 100;
+                units.text = (((amount_value - 55.93) / (1.2 * 0.85)) + R1units).toStringAsFixed(2)+" kWh";
+              } else {
+                double R1units = 100;
+
+                double R2units = (170 / 0.85);
+
+                double R3units = ((amount_value - 258.23) / (1.2 * 1.94));
+
+                units.text = (R1units + R2units + R3units).toStringAsFixed(2)+" kWh";
+              }
+
+
+
             });
           },
           child: Text('1st Purchase')
@@ -149,13 +178,54 @@ controller: amount,
       ),
       Padding(
           padding: EdgeInsets.only(top: 5),child: ElevatedButton(
-          onPressed:(){},
+          onPressed:(){
+            setState(() {
+              double amount_value = double.parse(amount.text);
+              double vat_tax = amount_value*0.16;
+              double customs_tax = amount_value*0.03;
+              double totalTax = (vat_tax) + (customs_tax);
+              double amountAfterTax = amount_value - totalTax;
+              after_tax.text = "K"+amountAfterTax.toStringAsFixed(2);
+              vat.text = "K"+(vat_tax).toStringAsFixed(2);
+              customs.text = "K"+(customs_tax).toStringAsFixed(2);
+
+              if (amountAfterTax >= 1 && amountAfterTax <= 201) {
+                units.text = ((amount_value) / (1.01)).toStringAsFixed(2)+" kWh";
+
+
+              } else {
+                //
+                units.text = (((amount_value-203) / (2.31)) + 201).toStringAsFixed(2)+" kWh";
+
+              }
+
+            });
+          },
           child: Text('2nd Purchase')
       ),
       ),
             Padding(
               padding: EdgeInsets.only(top: 5.0,bottom: 30),child: ElevatedButton(
-                onPressed:(){},
+                onPressed:(){
+
+                  setState(() {
+                    double amount_value = double.parse(amount.text);
+                    double vat_tax = amount_value*0.16;
+                    double customs_tax = amount_value*0.03;
+                    double totalTax = (vat_tax) + (customs_tax);
+                    double amountAfterTax = amount_value - totalTax;
+                    after_tax.text = "K"+amountAfterTax.toStringAsFixed(2);
+                    vat.text = "k"+(vat_tax).toStringAsFixed(2);
+                    customs.text = "k"+(customs_tax).toStringAsFixed(2);
+
+                    double R3bandPerUnit = 2.31;//2.31 ngwe per unit post tax
+                    units.text = (amount_value / R3bandPerUnit).toStringAsFixed(2)+" kWh";
+
+                    
+                  });
+
+
+                },
                 child: Text('3rd Purchase')
             ),
             ),
@@ -185,6 +255,14 @@ controller: amount,
                     hintStyle: TextStyle(color: Colors.white),
                     prefixIcon: Icon(Icons.money_sharp)
                 ),style: TextStyle(color: Colors.white),)),
+            Expanded(child: TextField(
+              readOnly:true,
+              controller: after_tax,
+              decoration: InputDecoration(
+                  hintText: 'Amount After TAX DEDUCTIONS (ZMW)',
+                  hintStyle: TextStyle(color: Colors.white),
+                  prefixIcon: Icon(Icons.money_off_csred_sharp)
+              ),style: TextStyle(color: Colors.white),)),
       ],
 
 
