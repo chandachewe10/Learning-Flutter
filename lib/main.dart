@@ -1,6 +1,7 @@
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const ZescoResidentialCalculator());
@@ -8,6 +9,20 @@ void main() {
 
 class ZescoResidentialCalculator extends StatelessWidget {
   const ZescoResidentialCalculator({Key? key}) : super(key: key);
+
+  // Function to trigger url redirect
+  _launchURLBrowser() async {
+    try {
+      var url = Uri.parse("https://www.google.com/");
+
+      await launchUrl(url);
+    }
+    catch (e) {
+
+    throw 'Could not launch'+ e.toString();
+
+  }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +34,10 @@ class ZescoResidentialCalculator extends StatelessWidget {
           title: const Text("ZESCO RESIDENTIAL CALCULATOR"),
         ),
         drawer: Drawer(
-          child: ListView(padding: EdgeInsets.all(10), children: [
+
+    child:ListView(
+
+        padding: EdgeInsets.all(10), children: [
             const DrawerHeader(
               decoration: BoxDecoration(
           image: DecorationImage(
@@ -31,20 +49,27 @@ class ZescoResidentialCalculator extends StatelessWidget {
               child: Text('',),
             ),
             ListTile(
+
               leading: const Icon(Icons.home),
               title: const Text('Home'),
+
               onTap: () {
                 // Update the state of the app.
                 // ...
               },
-            ),
+              ),
+
             ListTile(
+
               leading: const Icon(Icons.language_outlined),
-              title: const Text('Author'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
+              title:
+              const Text('Author'),
+
+                    onTap:
+                () {
+                //print('Tapped Successfully');
+                  _launchURLBrowser();
+                   }
             ),
             ListTile(
               leading: const Icon(Icons.share_outlined),
