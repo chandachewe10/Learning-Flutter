@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 void main() {
   runApp(const ZescoResidentialCalculator());
@@ -75,8 +76,10 @@ class ZescoResidentialCalculator extends StatelessWidget {
               leading: const Icon(Icons.share_outlined),
               title: const Text('Share'),
               onTap: () {
-                // Update the state of the app.
-                // ...
+                final box = context.findRenderObject() as RenderBox?;
+                Share.share("Hey Check this calculator I found",
+                    subject: "Zesco Residential Calculator",
+                    sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
               },
             ),
             const Divider(),
