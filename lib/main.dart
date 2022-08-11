@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 
 void main() {
   runApp(const ZescoResidentialCalculator());
@@ -14,7 +16,7 @@ class ZescoResidentialCalculator extends StatelessWidget {
   // Function to trigger url redirect
   _launchURLBrowser() async {
     try {
-      var url = Uri.parse("https://www.google.com/");
+      var url = Uri.parse("https://www.github.com/chandachewe10");
 
       await launchUrl(url);
     }
@@ -24,6 +26,21 @@ class ZescoResidentialCalculator extends StatelessWidget {
 
   }
   }
+
+
+  // Function to trigger Mailto
+  void _launchURL() async {
+    String telephoneNumber = '+260961264154';
+    String telephoneUrl = "tel:$telephoneNumber";
+    if (await launchUrlString(telephoneUrl)) {
+      await launchUrlString(telephoneUrl);
+    } else {
+      throw "Error occured trying to call that number.";
+    }
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +105,11 @@ class ZescoResidentialCalculator extends StatelessWidget {
               leading: const Icon(Icons.feedback),
               title: const Text('feedback'),
               onTap: () {
-                // Update the state of the app.
-                // ...
+                _launchURL();
+
+
+
+
               },
             ),
 
